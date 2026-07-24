@@ -16,7 +16,7 @@ function Pricing() {
 
         <div className="container">
             <div className="row">
-                <div className="col-lg-4 col-md-4 col-12 ">
+                <div className=" col-md-4 col-12 ">
                     <h1 className="mb-3 fs-2">Unbeatable pricing</h1>
                     <p>
                         We pioneered the concept of discount broking and price transparency
@@ -30,8 +30,8 @@ function Pricing() {
                         </a>
                     </>
                 </div>
-                <div className=" col-lg-2 col-md-2 col-12"></div>
-                <div className="col-lg-6 col-md-6 col-12  mb-5">
+                <div className="  col-md-2 col-12"></div>
+                <div className=" col-md-6 col-12  mb-5">
                     <div className="row text-center">
                         <div className="col p-3 border">
                             <h1 className="mb-3">₹0</h1>

@@ -4,8 +4,8 @@ import "./Stats.css";
 function Stats() {
   return (
     <div className="container p-3">
-      <div className="row align-items-center p-lg-5 p-md-2 p-1">
-        <div className="col-12 col-md-6 col-lg-6 p-3 p-md-4 p-lg-5">
+      <div className="row align-items-center p-md-2 p-1">
+        <div className="col-12 col-md-6  p-3 p-md-4">
           <h1 className="fs-2 mb-5">Trust with confidence</h1>
           <h2 className="fs-4">Customer-first always</h2>
           <p className="text-muted">
@@ -29,10 +29,10 @@ function Stats() {
             money.
           </p>
         </div>
-        <div className="col-12 col-md-6 col-lg-6 p-3 p-md-4 p-lg-5 mt-4 mt-md-0">
+        <div className="col-12 col-md-6  p-3 p-md-4 mt-4 mt-md-0">
           <img src="images/ecosystem.png" className="img-fluid" style={{ width: "90%" }} />
           <div className="row text-center mt-4 g-3">
-            <div className="col-12 col-md-6 col-lg-6">
+            <div className="col-12 col-md-6 ">
               <a
                 href=""
                 className="stats-link d-inline-flex align-items-center text-decoration-none fw-semibold"
@@ -41,7 +41,7 @@ function Stats() {
                 <i className="fa fa-long-arrow-right ms-2" aria-hidden="true"></i>
               </a>
             </div>
-            <div className="col-12 col-lg-6">
+            <div className="col-12 ">
               <a
                 href=""
                 className="stats-link d-inline-flex align-items-center text-decoration-none fw-semibold"

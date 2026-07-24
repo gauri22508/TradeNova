@@ -15,10 +15,10 @@ function Education() {
  }`}</style>
     <div className="container mt-5">
       <div className="row">
-        <div className="col-lg-6 col-md-6 col-12">
-          <img src="images/education.svg" className="img-fluid" style={{ width: "70%" }} />
+        <div className=" col-md-6 col-12">
+          <img src="images/education.svg" className="img-fluid" style={{ width: "90%" }} />
         </div>
-        <div className="col-lg-6 col-md-6 col-12 p-5  p-sm-1">
+        <div className=" col-md-6 col-12 p-5  p-sm-1">
           <h1 className="mb-3 fs-2">Free and open market education</h1>
           <p>
             Varsity, the largest online stock market education book in the world

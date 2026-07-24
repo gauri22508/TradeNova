@@ -6,7 +6,7 @@ function OpenAccount() {
             <div className="row justify-content-center text-center">
                 <div className="col-lg-12 col-md-8 col-sm-4">
                  
-                    <h1 className="mt-3">Open a Zerodha account</h1>
+                    <h1 className="mt-3">Open a TradeNova account</h1>
                     <p>Modern platforms and apps, ₹0 investments, and flat ₹20 intraday and F&O trades.</p>
 
                     <div className="d-grid d-sm-block mt-3">
