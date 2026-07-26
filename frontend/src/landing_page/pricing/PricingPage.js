@@ -11,6 +11,7 @@ function PricingPage() {
         <>
 
             <Hero />
+            <OpenAccount />
             <Brokerage />
 
         </>

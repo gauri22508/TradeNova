@@ -6,7 +6,7 @@ function LeftImage({ imageURL, productName, productDescription, tryDemo, learnMo
             <div className="row">
 
                 <div className=" col-md-6 col-12 ">
-                    <img src={imageURL} className="img-fluid" style={{ width: "100%" }} />
+                    <img src={imageURL} className="img-fluid" style={{ width: "90%" }} alt={productName} />
                 </div>
                 <div className="col-md-2 col-sm-1"></div>
                 <div className=" col-md-4 col-12 p-5  p-sm-1 mt-3 ">
