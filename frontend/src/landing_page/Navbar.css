@@ -46,3 +46,10 @@
   color: #084c96;
   font-size: 18px;
 }
+
+@media (max-width: 991px) {
+  .navbar-brand {
+    margin-left: 10px !important;
+  }
+}
+
