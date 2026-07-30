@@ -6,7 +6,7 @@ function Hero() {
             <div className="bg-white p-4 rounded shadow-sm mt-5 mb-5">
                 <div className="d-flex justify-content-between align-items-center mb-3">
                     <h1 className="fw-bold mb-0">Support Portal</h1>
-                    <button className="btn btn-primary" type="button">My Ticket</button>
+                    <button className="btn btn-primary support-hero-btn" type="button">My Ticket</button>
                 </div>
                 <div className="row">
                     <div className="col-12">

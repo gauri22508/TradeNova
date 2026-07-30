@@ -8,6 +8,20 @@ body {
   background-color: #f5f7fa;
 }
 
+/* Support page - responsive button */
+@media (max-width: 576px) {
+  .support-hero-btn {
+    width: 120px;
+    padding-left: 0.6rem;
+    padding-right: 0.6rem;
+  }
+
+  .support-hero-btn {
+    align-self: flex-end;
+    margin-top: 0.5rem;
+  }
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
