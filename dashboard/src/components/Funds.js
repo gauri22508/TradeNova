@@ -1,5 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import "./Funds.css";
+import "./Shared.css";
 
 const Funds = () => {
   return (

@@ -1,0 +1,102 @@
+.btn {
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 2px;
+    color: #fff;
+    margin-right: 2px;
+    margin-left: 2px;
+}
+
+.btn-green {
+    background: #4caf50;
+}
+
+.btn-blue {
+    background: #4184f3;
+}
+
+.btn-blue:hover {
+    background: #74a7fa;
+}
+
+.btn-green:hover {
+    background: #7bdd7f;
+}
+
+.title {
+    font-size: 1.3rem;
+    font-weight: 300;
+    color: rgb(71, 71, 71);
+    margin-bottom: 2%;
+}
+
+.order-table {
+    overflow-x: auto;
+    width: 100%;
+}
+
+.order-table table {
+    width: 100%;
+    min-width: 760px;
+    border-collapse: collapse;
+}
+
+.order-table tr {
+    border-top: 1px solid #f1f1f1;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.order-table th {
+    text-align: right;
+    padding: 15px 10px;
+    color: rgb(145, 145, 145);
+    font-weight: 300;
+    font-size: 0.8rem;
+}
+
+.order-table tr th:first-child,
+.order-table tr td:first-child {
+    text-align: left;
+}
+
+.order-table tr th:nth-child(1),
+.order-table tr th:nth-child(4) {
+    border-right: 1px solid #f1f1f1;
+}
+
+.order-table tr td:nth-child(1),
+.order-table tr td:nth-child(4) {
+    border-right: 1px solid #f1f1f1;
+}
+
+.order-table tr td:last-child {
+    font-size: 0.6rem;
+}
+
+.order-table td {
+    padding: 10px 10px;
+    text-align: right;
+    font-weight: 400;
+    font-size: 0.9rem;
+    color: rgb(73, 73, 73);
+}
+
+@media (max-width: 720px) {
+    .order-table th,
+    .order-table td {
+        font-size: 0.75rem;
+        padding: 8px 6px;
+    }
+}
+
+.align-left {
+    text-align: left;
+}
+
+.order-table td.profit {
+    color: rgb(72, 194, 55);
+}
+
+.order-table td.loss {
+    color: rgb(250, 118, 78);
+}

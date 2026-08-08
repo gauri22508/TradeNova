@@ -1,16 +1,19 @@
 import React, { useState } from "react";
 
 import { Link } from "react-router-dom";
+import "./Menu.css";
 
 const Menu = () => {
   const [selectedMenu, setSelectedMenu] = useState(0);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleMenuClick = (index) => {
     setSelectedMenu(index);
+    setIsMobileMenuOpen(false);
   };
 
-  const handleProfileClick = (index) => {
+  const handleProfileClick = () => {
     setIsProfileDropdownOpen(!isProfileDropdownOpen);
   };
 
@@ -19,8 +22,17 @@ const Menu = () => {
 
   return (
     <div className="menu-container">
-      <img src="logo.png" style={{ width: "50px" }} />
-      <div className="menus">
+      <button
+        className="menu-toggle"
+        onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+        aria-label="Toggle navigation menu"
+      >
+        ☰
+      </button>
+
+      <img src="logo.png" alt="Logo" className="brand-logo" />
+
+      <div className={`menus ${isMobileMenuOpen ? "mobile-open" : ""}`}>
         <ul>
           <li>
             <Link
@@ -69,7 +81,7 @@ const Menu = () => {
           <li>
             <Link
               style={{ textDecoration: "none" }}
-              to="funds"
+              to="/funds"
               onClick={() => handleMenuClick(4)}
             >
               <p className={selectedMenu === 4 ? activeMenuClass : menuClass}>
