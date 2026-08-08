@@ -5,16 +5,10 @@ import "./Menu.css";
 
 const Menu = () => {
   const [selectedMenu, setSelectedMenu] = useState(0);
-  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const handleMenuClick = (index) => {
     setSelectedMenu(index);
-    setIsMobileMenuOpen(false);
-  };
-
-  const handleProfileClick = () => {
-    setIsProfileDropdownOpen(!isProfileDropdownOpen);
   };
 
   const menuClass = "menu";
@@ -22,18 +16,16 @@ const Menu = () => {
 
   return (
     <div className="menu-container">
-      <button
-        className="menu-toggle"
-        onClick={() => setIsMobileMenuOpen((prev) => !prev)}
-        aria-label="Toggle navigation menu"
-      >
-        ☰
-      </button>
-
       <img src="logo.png" alt="Logo" className="brand-logo" />
 
-      <div className={`menus ${isMobileMenuOpen ? "mobile-open" : ""}`}>
-        <ul>
+      <div className="menus">
+        <button
+    className="menu-toggle"
+    onClick={() => setMenuOpen(!menuOpen)}
+>
+    ☰
+</button>
+     <ul className={menuOpen ? "mobile-menu-open" : ""}>
           <li>
             <Link
               style={{ textDecoration: "none" }}
@@ -102,7 +94,7 @@ const Menu = () => {
           </li>
         </ul>
         <hr />
-        <div className="profile" onClick={handleProfileClick}>
+        <div className="profile">
           <div className="avatar">TN</div>
           <p className="username">USERID</p>
         </div>

@@ -81,13 +81,6 @@
     color: rgb(73, 73, 73);
 }
 
-@media (max-width: 720px) {
-    .order-table th,
-    .order-table td {
-        font-size: 0.75rem;
-        padding: 8px 6px;
-    }
-}
 
 .align-left {
     text-align: left;

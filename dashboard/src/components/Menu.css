@@ -88,79 +88,43 @@ hr {
     cursor: pointer;
     color: rgb(223, 91, 43);
 }
-
 .menu-toggle {
     display: none;
-    border: none;
-    background: #f5f5f5;
-    color: #333;
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    font-size: 1.1rem;
-    cursor: pointer;
-    align-items: center;
-    justify-content: center;
 }
 
-@media (max-width: 960px) {
+@media (max-width: 425px) {
     .menu-container {
-        padding: 10px 12px;
-    }
-
-    .menu-toggle {
-        display: flex;
-    }
-
-    .brand-logo {
-        margin-left: 10px;
+        flex-basis: auto;
+        width: 100%;
+        padding: 10px;
     }
 
     .menus {
-        position: absolute;
-        top: calc(100% + 8px);
-        right: 12px;
-        left: 12px;
-        display: none;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 12px;
-        background: #fff;
-        border: 1px solid #ececec;
-        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
-        padding: 12px 14px;
-        z-index: 30;
+        display: flex;
+        width: 100%;
     }
 
-    .menus.mobile-open {
-        display: flex;
+    .menu-toggle {
+        display: block !important;
+        visibility: visible !important;
+        border: none;
+        background: none;
+        font-size: 24px;
+        cursor: pointer;
     }
 
     .menus ul {
-        width: 100%;
-    }
-
-    .menus li {
-        display: block;
-        margin-right: 0;
-        width: 100%;
-    }
-
-    .menu {
-        display: block;
-        padding: 10px 12px;
-        border-radius: 8px;
-    }
-
-    hr {
         display: none;
     }
 
-    .profile {
-        margin-left: 0;
-        width: 100%;
-        justify-content: flex-start;
-        border-top: 1px solid #f1f1f1;
-        padding-top: 12px;
+    .menus ul.mobile-menu-open {
+        display: block;
+        position: absolute;
+        top: 50px;
+        right: 5px;
+        background: white;
+        width: 180px;
+        padding: 15px;
+        z-index: 1000;
     }
 }

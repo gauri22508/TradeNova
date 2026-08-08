@@ -26,7 +26,8 @@
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-    z-index: -2;
+    position: relative;
+    z-index: 1;
 }
 
 .sensex {
@@ -34,6 +35,8 @@
     display: flex;
     align-items: center;
     justify-content: space-evenly;
+    position: relative;
+    z-index: 1;
 }
 
 .nifty>*,
@@ -64,32 +67,34 @@
 .index:hover {
     cursor: pointer;
 }
-
-@media (max-width: 960px) {
-    .topbar-container {
-        height: 68px;
-        min-height: 68px;
-    }
+@media (max-width: 425px) {
 
     .indices-container {
-        flex-basis: auto;
-        width: auto;
-        max-width: 65%;
-        padding: 8px 10px;
-        overflow-x: auto;
-        justify-content: flex-start;
-        gap: 10px;
+        display: flex;
+        flex-basis: 45%;
+        width: 45%;
+        padding: 5px;
+    }
+
+    .menu-container {
+        flex-basis: 55%;
+        width: 55%;
+        padding: 5px;
     }
 
     .nifty,
     .sensex {
-        min-width: 120px;
-        justify-content: flex-start;
+        flex-basis: 50%;
+    }
+
+    .nifty > *,
+    .sensex > * {
+        margin-right: 3px;
     }
 
     .index,
     .index-points,
     .percent {
-        font-size: 0.7rem;
+        font-size: 0.6rem;
     }
 }

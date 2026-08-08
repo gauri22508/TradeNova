@@ -9,6 +9,9 @@
     background: #fff;
 }
 
+
+/* SEARCH */
+
 .search-container {
     display: flex;
     align-items: center;
@@ -26,6 +29,7 @@
     color: #333;
     background: #fff;
     border-bottom: 0.8px solid rgb(235, 234, 234);
+    box-sizing: border-box;
 }
 
 .counts {
@@ -35,6 +39,9 @@
     font-weight: 400;
     color: rgb(177, 177, 177);
 }
+
+
+/* LIST */
 
 .list {
     list-style-type: none;
@@ -46,6 +53,9 @@
     padding: 12px 10px 12px 14px;
     position: relative;
 }
+
+
+/* ITEM */
 
 .item {
     display: flex;
@@ -62,7 +72,7 @@
     align-items: center;
 }
 
-.item-info>* {
+.item-info > * {
     margin-right: 8px;
 }
 
@@ -81,6 +91,9 @@
     color: rgb(223, 73, 73);
     flex: 1;
 }
+
+
+/* ACTIONS */
 
 .actions {
     position: absolute;
@@ -128,35 +141,8 @@
     color: rgb(65, 65, 65);
 }
 
-.watchlist-number {
-    height: 6%;
-    width: 32%;
-    box-sizing: border-box;
-    position: fixed;
-    display: inline-flex;
-    align-items: center;
-    justify-content: space-between;
-    bottom: 1px;
-    padding: 20px 20px 20px 0;
-    left: 0;
-    border: 1px solid rgb(231, 231, 231);
-    z-index: 5;
-    background: #fff;
-}
 
-.watchlist-number ul {
-    list-style-type: none;
-}
-
-.watchlist-number ul li {
-    display: inline-block;
-    padding: 10px 20px;
-    border-right: 1px solid rgb(231, 231, 231);
-}
-
-.watchlist-number ul li:nth-child(1) {
-    color: rgb(223, 73, 73);
-}
+/* COLORS */
 
 .down {
     color: rgb(223, 73, 73);
@@ -166,10 +152,16 @@
     color: rgb(103, 201, 136);
 }
 
+
+/* SETTINGS */
+
 .settings {
     transform: scale(0.8);
     color: rgb(105, 105, 105);
 }
+
+
+/* HOVER */
 
 .search:focus {
     outline: none;
@@ -180,7 +172,7 @@
     background-color: #f3f3f3;
 }
 
-.list li:hover>.actions {
+.list li:hover > .actions {
     display: flex;
     cursor: move;
 }
@@ -195,16 +187,144 @@
     left: 0;
 }
 
-.watchlist-number ul li:hover {
-    color: rgb(245, 104, 52);
-    cursor: pointer;
-    background: rgb(243, 243, 243);
-}
-
 .settings:hover {
     cursor: pointer;
 }
 
 .action:hover {
     background-color: rgb(212, 212, 212);
+}
+
+
+/* =====================================
+   MOBILE WATCHLIST
+   ===================================== */
+
+.watchlist-toggle {
+    display: none;
+}
+
+.watchlist-mobile-header {
+    display: none;
+}
+
+
+/* 425px and below */
+
+@media (max-width: 425px) {
+
+    /* Button that opens WatchList */
+
+    .watchlist-toggle {
+        display: block;
+
+        position: fixed;
+        top: 75px;
+        left: 10px;
+
+        z-index: 1001;
+
+        padding: 10px 15px;
+
+        border: none;
+        border-radius: 5px;
+
+        background: #4184f3;
+        color: white;
+
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+
+    /* Hide WatchList normally */
+
+    .watchlist-container {
+        display: none;
+    }
+
+
+    /* Open WatchList */
+
+    .watchlist-container.open {
+        display: block;
+
+        position: fixed;
+
+        top: 68px;
+        left: 0;
+
+        width: 100%;
+        max-width: 100%;
+
+        height: calc(100vh - 68px);
+
+        z-index: 8;
+
+        background: #fff;
+
+        overflow-y: auto;
+
+        box-sizing: border-box;
+    }
+
+
+    /* WatchList header */
+
+    .watchlist-mobile-header {
+        display: flex;
+
+        width: 100%;
+        height: 55px;
+
+        padding: 0 15px;
+
+        align-items: center;
+        justify-content: space-between;
+
+        box-sizing: border-box;
+
+        border-bottom: 1px solid #ddd;
+
+        background: #fff;
+    }
+
+
+    .watchlist-mobile-header span {
+        font-size: 16px;
+        font-weight: 500;
+    }
+
+
+    .watchlist-mobile-header button {
+        border: none;
+
+        background: none;
+
+        color: #4184f3;
+
+        font-size: 14px;
+
+        cursor: pointer;
+    }
+
+
+    /* Search stays below WatchList header */
+
+    .search-container {
+        width: 100%;
+    }
+
+
+    .search {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+
+    /* Make stock items fit small screens */
+
+    .list li {
+        padding: 12px 10px;
+    }
 }

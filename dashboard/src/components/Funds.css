@@ -82,3 +82,27 @@
     margin-bottom: 10%;
     color: #c9c9c9;
 }
+
+@media (max-width: 425px) {
+    .row {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .col {
+        flex-basis: 100%;
+        width: 100%;
+    }
+
+    .table {
+        padding: 20px 15px;
+    }
+
+    .table .data p {
+        font-size: 0.85rem;
+    }
+
+    .imp {
+        font-size: 1rem;
+    }
+}

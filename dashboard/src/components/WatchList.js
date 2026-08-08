@@ -1,31 +1,60 @@
+import React, { useState } from "react";
 import "./WatchList.css";
 
 import { watchlist } from "../data/data";
 import WatchListItem from "./WatchListIItem";
 
-
-
 const WatchList = () => {
-  return (
-    <div className="watchlist-container">
-      <div className="search-container">
-        <input
-          type="text"
-          name="search"
-          id="search"
-          placeholder="Search eg:infy, bse, nifty fut weekly, gold mcx"
-          className="search"
-        />
-        <span className="counts">{watchlist.length}</span>
-      </div>
+    const [open, setOpen] = useState(false);
 
-      <ul className="list">
-        {watchlist.map((stock, index) => (
-          <WatchListItem stock={stock} key={index} />
-        ))}
-      </ul>
-    </div>
-  );
+    return (
+        <>
+           
+            <button
+                className="watchlist-toggle"
+                onClick={() => setOpen(true)}
+            >
+                WatchList
+            </button>
+
+         
+            <div className={`watchlist-container ${open ? "open" : ""}`}>
+
+                
+                <div className="watchlist-mobile-header">
+                    <span>WatchList</span>
+
+                    <button onClick={() => setOpen(false)}>
+                        Close
+                    </button>
+                </div>
+
+              
+                <div className="search-container">
+                    <input
+                        type="text"
+                        placeholder="Search"
+                        className="search"
+                    />
+
+                    <p className="counts">
+                        {watchlist.length}
+                    </p>
+                </div>
+
+               
+                <ul className="list">
+                    {watchlist.map((stock, index) => (
+                        <WatchListItem
+                            stock={stock}
+                            key={index}
+                        />
+                    ))}
+                </ul>
+
+            </div>
+        </>
+    );
 };
 
 export default WatchList;
