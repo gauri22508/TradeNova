@@ -32,13 +32,6 @@
     box-sizing: border-box;
 }
 
-.counts {
-    position: absolute;
-    right: 20px;
-    font-size: 0.9rem;
-    font-weight: 400;
-    color: rgb(177, 177, 177);
-}
 
 
 /* LIST */
@@ -196,7 +189,7 @@
 }
 
 
-/* =====================================
+/*
    MOBILE WATCHLIST
    ===================================== */
 
