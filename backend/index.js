@@ -2,13 +2,19 @@ require("dotenv").config();
 
 const express = require("express");
 const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
+const cors = require("cors");
 
-const PORT = process.env.PORT || 3002;
- const {HoldingsModel} = require("./model/HoldingsModel");
-    const {OrdersModel} = require("./model/OrdersModel");
-    const {PositionsModel} = require("./model/PositionsModel");
+const { HoldingsModel } = require("./model/HoldingsModel");
+const { OrdersModel } = require("./model/OrdersModel");
+const { PositionsModel } = require("./model/PositionsModel");
 
 const app = express();
+
+const PORT = process.env.PORT || 3002;
+
+app.use(cors());
+app.use(bodyParser.json());
 
 // app.get("/addHoldings", async (req, res) => {
 //     let tempHoldings=[
@@ -176,19 +182,65 @@ const app = express();
 //     res.send("Positions added successfully");
 // });
 
-app.listen(PORT, () => {
-    console.log("server started");
 
-    mongoose.connect(process.env.MONGO_URL, {
-        auth: {
-            username: process.env.MONGO_USER,
-            password: process.env.MONGO_PASSWORD
-        }
-    })
-    .then(() => {
-        console.log("db connected");
-    })
-    .catch((err) => {
-        console.log("db connection error", err);
+// Get all Holdings
+app.get("/allHoldings", async (req, res) => {
+  try {
+    const allHoldings = await HoldingsModel.find({});
+    res.json(allHoldings);
+  } catch (err) {
+    console.log("Error fetching holdings:", err);
+    res.status(500).json({
+      error: "Failed to fetch holdings",
     });
+  }
 });
+
+
+// Get all Positions
+app.get("/allPositions", async (req, res) => {
+  try {
+    const allPositions = await PositionsModel.find({});
+    res.json(allPositions);
+  } catch (err) {
+    console.log("Error fetching positions:", err);
+    res.status(500).json({
+      error: "Failed to fetch positions",
+    });
+  }
+});
+
+app.post("/addOrder", async (req, res) => {
+  try {
+
+    const newOrder = new OrdersModel({
+      name: req.body.name,
+      qty:req.body.qty,
+      price:req.body.price,
+      mode:req.body.mode,
+     
+    });
+
+    await newOrder.save();
+    res.send("Order saved");
+  } catch (err) {
+    console.log("Error adding order:", err);
+    res.send("failed to save the order");
+  }
+});
+
+
+// Start server
+app.listen(PORT, () => {
+  console.log(`Server started on port ${PORT}`);
+
+ mongoose
+  .connect(process.env.MONGO_URL)
+  .then(() => {
+    console.log("DB connected");
+  })
+  .catch((err) => {
+    console.log("DB connection error:", err);
+  });
+});
+

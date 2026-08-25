@@ -9,7 +9,6 @@ const WatchList = () => {
 
     return (
         <>
-           
             <button
                 className="watchlist-toggle"
                 onClick={() => setOpen(true)}
@@ -17,10 +16,7 @@ const WatchList = () => {
                 WatchList
             </button>
 
-         
             <div className={`watchlist-container ${open ? "open" : ""}`}>
-
-                
                 <div className="watchlist-mobile-header">
                     <span>WatchList</span>
 
@@ -29,7 +25,6 @@ const WatchList = () => {
                     </button>
                 </div>
 
-              
                 <div className="search-container">
                     <input
                         type="text"
@@ -42,7 +37,6 @@ const WatchList = () => {
                     </p>
                 </div>
 
-               
                 <ul className="list">
                     {watchlist.map((stock, index) => (
                         <WatchListItem
@@ -51,7 +45,6 @@ const WatchList = () => {
                         />
                     ))}
                 </ul>
-
             </div>
         </>
     );

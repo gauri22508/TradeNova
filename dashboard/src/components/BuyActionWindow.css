@@ -1,0 +1,219 @@
+.buy-window-container {
+    --radius: 4px;
+
+    width: 400px;
+    min-height: 220px;
+
+    background: #fff;
+
+    position: fixed;
+
+    /* Center of the screen */
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    box-sizing: border-box;
+
+    z-index: 1000;
+
+    border-radius: var(--radius);
+
+    border: 1px solid #ddd;
+
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+
+    cursor: default;
+}
+
+
+/* Order section */
+
+.regular-order {
+    padding: 25px;
+    background-color: #fff;
+
+    border-top-left-radius: var(--radius);
+    border-top-right-radius: var(--radius);
+}
+
+
+/* Quantity + Price */
+
+.inputs {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin: 0;
+}
+
+
+.inputs fieldset {
+    flex: 1;
+
+    box-sizing: border-box;
+
+    border: 1px solid #ddd;
+
+    margin: 0;
+
+    min-width: 0;
+}
+
+
+.inputs fieldset legend {
+    margin-left: 10px;
+
+    font-size: 0.8rem;
+
+    padding: 0 4px;
+
+    color: #666;
+}
+
+
+.inputs fieldset input {
+    width: 100%;
+
+    border: none;
+
+    min-height: 40px;
+
+    padding: 0 12px;
+
+    box-sizing: border-box;
+
+    font-size: 1.1rem;
+}
+
+
+.inputs fieldset input:focus {
+    outline: none;
+}
+
+
+/* Bottom buttons section */
+
+.buttons {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 18px 25px;
+
+    border-top: 1px solid #eee;
+
+    background: #fff;
+
+    border-bottom-left-radius: var(--radius);
+
+    border-bottom-right-radius: var(--radius);
+}
+
+
+.buttons span {
+    font-size: 0.8rem;
+
+    color: #555;
+}
+
+
+.buttons > div {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+}
+
+
+/* Common button */
+
+.btn {
+    display: inline-block;
+
+    text-decoration: none;
+
+    padding: 9px 18px;
+
+    border-radius: 3px;
+
+    font-size: 0.9rem;
+
+    cursor: pointer;
+
+    border: none;
+}
+
+
+/* Buy */
+
+.btn-blue {
+    background: #4184f3;
+
+    color: #fff;
+}
+
+
+.btn-blue:hover {
+    background: #2f73df;
+}
+
+
+/* Cancel */
+
+.btn-grey {
+    background: #d4d4d4;
+
+    color: #666;
+}
+
+
+.btn-grey:hover {
+    background: #9b9b9b;
+
+    color: #fff;
+}
+
+
+/* Mobile */
+
+@media (max-width: 500px) {
+
+    .buy-window-container {
+        width: calc(100% - 30px);
+
+        max-width: 400px;
+    }
+
+    .regular-order {
+        padding: 20px;
+    }
+
+    .buttons {
+        padding: 15px 20px;
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 15px;
+    }
+
+    .buttons > div {
+        justify-content: flex-end;
+    }
+}
+  
