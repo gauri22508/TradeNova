@@ -1,28 +1,30 @@
-import { useContext  , useState} from "react";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
 import GeneralContext from "./GeneralContext";
-import "./BuyActionWindow.css";
+import "./BuySellActionWindow.css";
 
-const BuyActionWindow = ({ uid }) => {
-    const { closeBuyWindow } = useContext(GeneralContext);
+const BuySellActionWindow = ({ uid , mode }) => {
+    const { closeBuySellWindow } = useContext(GeneralContext);
 
-    const[stockQuantity , setStockQuantity] = useState(1);
-    const[stockPrice , setStockPrice] = useState(0.0);
+    const [stockQuantity, setStockQuantity] = useState(1);
+    const [stockPrice, setStockPrice] = useState(0.0);
 
-const handleBuyClick = ()=>{
-    axios.post("http://localhost:3002/addOrder" ,{
-        name:uid,
-        qty: stockQuantity,
-        price: stockPrice,
-        mode:"BUY"
-    });
-     closeBuyWindow();
-};
+    const handleOrderClick = () => {
+        axios.post("http://localhost:3002/addOrder", {
+            name: uid,
+            qty: stockQuantity,
+            price: stockPrice,
+            mode: mode,
+        });
+          alert("Order Saved");
+        closeBuySellWindow();
+    };
 
     const handleCancelClick = () => {
-         closeBuyWindow();
+        closeBuySellWindow();
+      
     };
 
     return (
@@ -41,7 +43,7 @@ const handleBuyClick = ()=>{
                             type="number"
                             id="qty"
                             name="qty"
-                            onChange= {(e) => setStockQuantity(e.target.value)}
+                            onChange={(e) => setStockQuantity(e.target.value)}
                             value={stockQuantity}
                         />
                     </fieldset>
@@ -53,7 +55,7 @@ const handleBuyClick = ()=>{
                             type="number"
                             id="price"
                             name="price"
-                            onChange= {(e) => setStockPrice(e.target.value)}
+                            onChange={(e) => setStockPrice(e.target.value)}
                             value={stockPrice}
                         />
                     </fieldset>
@@ -69,8 +71,8 @@ const handleBuyClick = ()=>{
                 </span>
 
                 <div>
-                    <Link className="btn btn-blue" onClick={handleBuyClick}>
-                        Buy
+                    <Link className="btn btn-blue" onClick={handleOrderClick}>
+                      {mode === "BUY"? "BUY" : "SELL"}
                     </Link>
 
                     <Link
@@ -87,4 +89,4 @@ const handleBuyClick = ()=>{
     );
 };
 
-export default BuyActionWindow;
+export default BuySellActionWindow;

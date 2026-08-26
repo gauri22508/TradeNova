@@ -59,9 +59,9 @@ const WatchListItem = ({ stock }) => {
 export default WatchListItem;
 
 
-const WatchListAction = ({ uid }) => {
+const WatchListAction = ({ uid  }) => {
 
-    const { openBuyWindow } = useContext(GeneralContext);
+    const { openBuySellWindow } = useContext(GeneralContext);
 
     return (
         <span className="actions">
@@ -75,7 +75,7 @@ const WatchListAction = ({ uid }) => {
                 >
                     <button
                         className="buy"
-                        onClick={() => openBuyWindow(uid)}
+                        onClick={() => openBuySellWindow(uid , "BUY")}
                     >
                         Buy
                     </button>
@@ -88,7 +88,8 @@ const WatchListAction = ({ uid }) => {
                     arrow
                     TransitionComponent={Grow}
                 >
-                    <button className="sell">
+                    <button className="sell"
+                         onClick={() => openBuySellWindow(uid , "SELL")}>
                         Sell
                     </button>
                 </Tooltip>
