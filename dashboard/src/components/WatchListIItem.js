@@ -1,3 +1,4 @@
+
 import { useState, useContext } from "react";
 import "./WatchList.css";
 
@@ -50,7 +51,10 @@ const WatchListItem = ({ stock }) => {
             </div>
 
             {isHovered && (
-                <WatchListAction uid={stock.uid} />
+                <WatchListAction
+                    uid={stock.uid}
+                    name={stock.name}
+                />
             )}
         </li>
     );
@@ -59,7 +63,7 @@ const WatchListItem = ({ stock }) => {
 export default WatchListItem;
 
 
-const WatchListAction = ({ uid  }) => {
+const WatchListAction = ({ uid, name }) => {
 
     const { openBuySellWindow } = useContext(GeneralContext);
 
@@ -75,7 +79,9 @@ const WatchListAction = ({ uid  }) => {
                 >
                     <button
                         className="buy"
-                        onClick={() => openBuySellWindow(uid , "BUY")}
+                        onClick={() =>
+                            openBuySellWindow(uid, name, "BUY")
+                        }
                     >
                         Buy
                     </button>
@@ -83,20 +89,24 @@ const WatchListAction = ({ uid  }) => {
 
 
                 <Tooltip
-                    title="Sell (s)"
+                    title="Sell (S)"
                     placement="top"
                     arrow
                     TransitionComponent={Grow}
                 >
-                    <button className="sell"
-                         onClick={() => openBuySellWindow(uid , "SELL")}>
+                    <button
+                        className="sell"
+                        onClick={() =>
+                            openBuySellWindow(uid, name, "SELL")
+                        }
+                    >
                         Sell
                     </button>
                 </Tooltip>
 
 
                 <Tooltip
-                    title="Analytics (a)"
+                    title="Analytics (A)"
                     placement="top"
                     arrow
                     TransitionComponent={Grow}
@@ -122,4 +132,3 @@ const WatchListAction = ({ uid  }) => {
         </span>
     );
 };
-
