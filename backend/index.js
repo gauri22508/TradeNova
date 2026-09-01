@@ -5,16 +5,24 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 
-const { HoldingsModel } = require("./model/HoldingsModel");
-const { OrdersModel } = require("./model/OrdersModel");
-const { PositionsModel } = require("./model/PositionsModel");
+const holdingsRoutes = require("./routes/holdingsRoutes");
+const positionsRoutes = require("./routes/positionsRoutes");
+const orderRoutes = require("./routes/orderRoutes");
 
 const app = express();
 
 const PORT = process.env.PORT || 3002;
 
+// Middleware
 app.use(cors());
 app.use(bodyParser.json());
+
+// Routes
+app.use("/", holdingsRoutes);
+app.use("/", positionsRoutes);
+app.use("/", orderRoutes);
+
+//hardcode
 
 // app.get("/addHoldings", async (req, res) => {
 //     let tempHoldings=[
@@ -181,150 +189,21 @@ app.use(bodyParser.json());
 // });
 
 
-// Get all Holdings
-app.get("/allHoldings", async (req, res) => {
-  try {
-    const allHoldings = await HoldingsModel.find({});
-    res.json(allHoldings);
-  } catch (err) {
-    console.log("Error fetching holdings:", err);
-    res.status(500).json({
-      error: "Failed to fetch holdings",
+
+// Connect DB and start server
+
+// connect DB and start server
+
+mongoose
+  .connect(process.env.MONGO_URL) 
+  .then(() => {
+    console.log("DB connected");
+
+    app.listen(PORT, () => {
+      console.log(`Server started on port ${PORT}`);
     });
-  }
-});
-
-
-// Get all Positions
-app.get("/allPositions", async (req, res) => {
-  try {
-    const allPositions = await PositionsModel.find({});
-    res.json(allPositions);
-  } catch (err) {
-    console.log("Error fetching positions:", err);
-    res.status(500).json({
-      error: "Failed to fetch positions",
-    });
-  }
-});
-
-app.post("/addOrder", async (req, res) => {
-  try {
-
-    const { name, qty, price, mode } = req.body;
-
-    console.log("ORDER DATA:", req.body);
-
-    const newOrder = new OrdersModel({
-      name,
-      qty: Number(qty),
-      price: Number(price),
-      mode,
-    });
-
-    await newOrder.save();
-
-    const holding = await HoldingsModel.findOne({
-      name: name
-    });
-
-    console.log("FOUND HOLDING:", holding);
-
-    console.log("MODE:", mode);
-
-    // BUY
-    if (mode === "BUY") {
-
-      if (holding) {
-
-        console.log("BUY: Existing holding found");
-
-        const oldQty = holding.qty;
-        const oldAvg = holding.avg;
-
-        const newQty = oldQty + Number(qty);
-
-        const newAvg =
-          ((oldQty * oldAvg) +
-          (Number(qty) * Number(price))) / newQty;
-
-        holding.qty = newQty;
-        holding.avg = newAvg;
-        holding.price = Number(price);
-
-        await holding.save();
-
-        console.log("UPDATED HOLDING:", holding);
-
-      } else {
-
-        console.log("BUY: Holding not found, creating new");
-
-        const newHolding = new HoldingsModel({
-          name,
-          qty: Number(qty),
-          avg: Number(price),
-          price: Number(price),
-          net: "0%",
-          day: "0%",
-        });
-
-        await newHolding.save();
-
-        console.log("NEW HOLDING:", newHolding);
-      }
-    }
-
-    // SELL
-    if (mode === "SELL") {
-
-      console.log("SELL requested");
-
-      if (!holding) {
-        return res.status(400).send("You don't own this stock");
-      }
-
-      const newQty = holding.qty - Number(qty);
-
-      if (newQty < 0) {
-        return res.status(400).send("Not enough quantity");
-      }
-
-      if (newQty === 0) {
-
-        await HoldingsModel.deleteOne({
-          name: name
-        });
-
-      } else {
-
-        holding.qty = newQty;
-        holding.price = Number(price);
-
-        await holding.save();
-      }
-    }
-
-    res.send("Order saved and holding updated");
-
-  } catch (err) {
-
-    console.log("ERROR:", err);
-
-    res.status(500).send("Failed");
-  }
-});
-// Start server
-app.listen(PORT, () => {
-  console.log(`Server started on port ${PORT}`);
-
-  mongoose
-    .connect(process.env.MONGO_URL)
-    .then(() => {
-      console.log("DB connected");
-    })
-    .catch((err) => {
-      console.log("DB connection error:", err);
-    });
-});
+  })
+  .catch((err) => {
+    console.log("DB connection error:", err);
+  });
 
