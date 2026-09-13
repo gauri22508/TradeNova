@@ -4,7 +4,7 @@ const router = express.Router();
 
 const {
   addOrder,
-} = require("../controllers/orderController");
+} = require("../controllers/ordersController");
 
 router.post("/addOrder", addOrder);
 
