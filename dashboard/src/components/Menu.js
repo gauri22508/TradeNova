@@ -1,14 +1,19 @@
 import React, { useState } from "react";
 
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
+import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import "./Menu.css";
 
-const Menu = () => {
-  const [selectedMenu, setSelectedMenu] = useState(0);
+const Menu = ({ username = "User", isDarkMode, onToggleDarkMode }) => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const displayName = username.trim() || "User";
+  const avatarInitial = displayName.charAt(0).toUpperCase();
 
-  const handleMenuClick = (index) => {
-    setSelectedMenu(index);
+  const handleLogout = () => {
+    document.cookie = "token=; Max-Age=0; path=/";
+    window.location.href = "http://localhost:3000/login";
   };
 
   const menuClass = "menu";
@@ -20,83 +25,100 @@ const Menu = () => {
 
       <div className="menus">
         <button
-    className="menu-toggle"
-    onClick={() => setMenuOpen(!menuOpen)}
->
-    ☰
-</button>
-     <ul className={menuOpen ? "mobile-menu-open" : ""}>
+          className="menu-toggle"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          ☰
+        </button>
+        <ul className={menuOpen ? "mobile-menu-open" : ""}>
           <li>
-            <Link
+            <NavLink
               style={{ textDecoration: "none" }}
               to="/"
-              onClick={() => handleMenuClick(0)}
+              end
+              onClick={() => setMenuOpen(false)}
+              className={({ isActive }) => isActive ? activeMenuClass : menuClass}
             >
-              <p className={selectedMenu === 0 ? activeMenuClass : menuClass}>
-                Dashboard
-              </p>
-            </Link>
+              Dashboard
+            </NavLink>
           </li>
           <li>
-            <Link
+            <NavLink
               style={{ textDecoration: "none" }}
               to="/orders"
-              onClick={() => handleMenuClick(1)}
+              onClick={() => setMenuOpen(false)}
+              className={({ isActive }) => isActive ? activeMenuClass : menuClass}
             >
-              <p className={selectedMenu === 1 ? activeMenuClass : menuClass}>
-                Orders
-              </p>
-            </Link>
+              Orders
+            </NavLink>
           </li>
           <li>
-            <Link
+            <NavLink
               style={{ textDecoration: "none" }}
               to="/holdings"
-              onClick={() => handleMenuClick(2)}
+              onClick={() => setMenuOpen(false)}
+              className={({ isActive }) => isActive ? activeMenuClass : menuClass}
             >
-              <p className={selectedMenu === 2 ? activeMenuClass : menuClass}>
-                Holdings
-              </p>
-            </Link>
+              Holdings
+            </NavLink>
           </li>
           <li>
-            <Link
+            <NavLink
               style={{ textDecoration: "none" }}
               to="/positions"
-              onClick={() => handleMenuClick(3)}
+              onClick={() => setMenuOpen(false)}
+              className={({ isActive }) => isActive ? activeMenuClass : menuClass}
             >
-              <p className={selectedMenu === 3 ? activeMenuClass : menuClass}>
-                Positions
-              </p>
-            </Link>
+              Positions
+            </NavLink>
           </li>
           <li>
-            <Link
+            <NavLink
               style={{ textDecoration: "none" }}
               to="/funds"
-              onClick={() => handleMenuClick(4)}
+              onClick={() => setMenuOpen(false)}
+              className={({ isActive }) => isActive ? activeMenuClass : menuClass}
             >
-              <p className={selectedMenu === 4 ? activeMenuClass : menuClass}>
-                Funds
-              </p>
-            </Link>
+              Funds
+            </NavLink>
           </li>
           <li>
-            <Link
+            <NavLink
               style={{ textDecoration: "none" }}
               to="/apps"
-              onClick={() => handleMenuClick(6)}
+              onClick={() => setMenuOpen(false)}
+              className={({ isActive }) => isActive ? activeMenuClass : menuClass}
             >
-              <p className={selectedMenu === 6 ? activeMenuClass : menuClass}>
-                Apps
-              </p>
-            </Link>
+              Apps
+            </NavLink>
           </li>
         </ul>
         <hr />
-        <div className="profile">
-          <div className="avatar">TN</div>
-          <p className="username">USERID</p>
+        <div className={`profile${profileOpen ? " profile-open" : ""}`}>
+          <button
+            className="avatar"
+            type="button"
+            onClick={() => setProfileOpen(!profileOpen)}
+            aria-label={`Open profile menu for ${displayName}`}
+            aria-expanded={profileOpen}
+            aria-haspopup="true"
+          >
+            {avatarInitial}
+          </button>
+          <div className="profile-dropdown">
+            <p className="username" title={displayName}>{displayName}</p>
+            <button
+              className="theme-toggle"
+              type="button"
+              onClick={onToggleDarkMode}
+              aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
+              title={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
+            >
+              {isDarkMode ? <LightModeOutlinedIcon fontSize="small" /> : <DarkModeOutlinedIcon fontSize="small" />}
+              <span className="theme-label">{isDarkMode ? "Light mode" : "Dark mode"}</span>
+            </button>
+            <button className="logout-button" type="button" onClick={handleLogout}>Logout</button>
+          </div>
         </div>
       </div>
     </div>

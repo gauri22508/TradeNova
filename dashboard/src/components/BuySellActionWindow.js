@@ -1,43 +1,52 @@
 import { useContext, useState } from "react";
-import { Link } from "react-router-dom";
 import axios from "axios";
 
 import GeneralContext from "./GeneralContext";
 import "./BuySellActionWindow.css";
 
-const BuySellActionWindow = ({ uid, name, mode }) => {
+const BuySellActionWindow = ({ name, price, mode }) => {
 
-    const { closeBuySellWindow } =
+    const { closeBuySellWindow, showOrderNotice } =
         useContext(GeneralContext);
 
     const [stockQuantity, setStockQuantity] = useState(1);
 
-    const [stockPrice, setStockPrice] =useState(0.0);
+    const [stockPrice, setStockPrice] = useState(price);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
 
 
     const handleOrderClick = async () => {
+        const quantity = Number(stockQuantity);
+        const orderPrice = Number(stockPrice);
 
+        if (!Number.isInteger(quantity) || quantity <= 0 || !Number.isFinite(orderPrice) || orderPrice <= 0) {
+            setErrorMessage("Enter a quantity above 0 and a valid price.");
+            return;
+        }
+
+        setErrorMessage("");
+        setIsSubmitting(true);
         try {
-
             await axios.post(
                 "http://localhost:3002/addOrder",
                 {
                     name: name,
-                    qty: stockQuantity,
-                    price: stockPrice,
+                    qty: quantity,
+                    price: orderPrice,
                     mode: mode,
-                }
+                },
+                { withCredentials: true }
             );
 
-            alert("Order Saved");
-
+            window.dispatchEvent(new Event("trade:updated"));
+            showOrderNotice(`${mode} order placed: ${quantity} ${name} at ₹${orderPrice.toFixed(2)}.`);
             closeBuySellWindow();
 
         } catch (err) {
-
-            console.log("Order Error:", err);
-
-            alert("Failed to save order");
+            setErrorMessage(err.response?.data?.error || err.response?.data || "Unable to save order. Please try again.");
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -71,6 +80,8 @@ const BuySellActionWindow = ({ uid, name, mode }) => {
                                 setStockQuantity(e.target.value)
                             }
                             value={stockQuantity}
+                            min="1"
+                            step="1"
                         />
 
                     </fieldset>
@@ -88,6 +99,8 @@ const BuySellActionWindow = ({ uid, name, mode }) => {
                                 setStockPrice(e.target.value)
                             }
                             value={stockPrice}
+                            min="0.01"
+                            step="0.01"
                         />
 
                     </fieldset>
@@ -99,28 +112,21 @@ const BuySellActionWindow = ({ uid, name, mode }) => {
 
             <div className="buttons">
 
-                <span>
-                    Margin required ₹140.65
-                </span>
+                <span>Estimated order value ₹{(Number(stockQuantity || 0) * Number(stockPrice || 0)).toFixed(2)}</span>
+
+                {errorMessage && <p className="order-error" role="alert">{errorMessage}</p>}
 
 
                 <div>
 
-                    <Link
-                        className="btn btn-blue"
-                        onClick={handleOrderClick}
-                    >
+                    <button className="btn btn-blue" onClick={handleOrderClick} disabled={isSubmitting} type="button">
                         {mode === "BUY" ? "BUY" : "SELL"}
-                    </Link>
+                    </button>
 
 
-                    <Link
-                        to=""
-                        className="btn btn-grey"
-                        onClick={handleCancelClick}
-                    >
+                    <button type="button" className="btn btn-grey" onClick={handleCancelClick} disabled={isSubmitting}>
                         Cancel
-                    </Link>
+                    </button>
 
                 </div>
 

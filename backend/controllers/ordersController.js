@@ -1,5 +1,16 @@
-const { HoldingsModel } = require("../model/HoldingsModel");
-const { OrdersModel } = require("../model/OrdersModel");
+const { HoldingsModel } = require("../models/HoldingsModel");
+const { PositionsModel } = require("../models/PositionsModel");
+const { OrdersModel } = require("../models/OrdersModel");
+
+const getAllOrders = async (req, res) => {
+  try {
+    const allOrders = await OrdersModel.find({ userId: req.userId }).sort({ _id: -1 });
+    res.json(allOrders);
+  } catch (err) {
+    console.log("Error fetching orders:", err);
+    res.status(500).json({ error: "Failed to fetch orders" });
+  }
+};
 
 const addOrder = async (req, res) => {
   try {
@@ -35,14 +46,13 @@ const addOrder = async (req, res) => {
       });
     }
 
-    const holding = await HoldingsModel.findOne({
-      name: name,
-    });
+    const holding = await HoldingsModel.findOne({ name, userId: req.userId });
+    const position = await PositionsModel.findOne({ name, userId: req.userId });
 
     console.log("FOUND HOLDING:", holding);
     console.log("MODE:", mode);
 
-    
+
     // SELL
     // =========================
 
@@ -62,6 +72,7 @@ const addOrder = async (req, res) => {
       if (newQty === 0) {
         await HoldingsModel.deleteOne({
           name: name,
+          userId: req.userId,
         });
       } else {
         holding.qty = newQty;
@@ -69,9 +80,21 @@ const addOrder = async (req, res) => {
 
         await holding.save();
       }
+
+      if (position) {
+        const newPositionQty = position.qty - quantity;
+
+        if (newPositionQty <= 0) {
+          await PositionsModel.deleteOne({ _id: position._id });
+        } else {
+          position.qty = newPositionQty;
+          position.price = orderPrice;
+          await position.save();
+        }
+      }
     }
 
-  
+
     // BUY
     // =========================
 
@@ -98,6 +121,7 @@ const addOrder = async (req, res) => {
         console.log("BUY: Holding not found, creating new");
 
         const newHolding = new HoldingsModel({
+          userId: req.userId,
           name: name,
           qty: quantity,
           avg: orderPrice,
@@ -110,10 +134,32 @@ const addOrder = async (req, res) => {
 
         console.log("NEW HOLDING:", newHolding);
       }
+
+      if (position) {
+        const oldQty = position.qty;
+        const newQty = oldQty + quantity;
+        position.avg = (oldQty * position.avg + quantity * orderPrice) / newQty;
+        position.qty = newQty;
+        position.price = orderPrice;
+        await position.save();
+      } else {
+        await PositionsModel.create({
+          userId: req.userId,
+          product: "CNC",
+          name,
+          qty: quantity,
+          avg: orderPrice,
+          price: orderPrice,
+          net: "0%",
+          day: "0%",
+          isLoss: false,
+        });
+      }
     }
 
     // Save order only after BUY/SELL operation succeeds
     const newOrder = new OrdersModel({
+      userId: req.userId,
       name: name,
       qty: quantity,
       price: orderPrice,
@@ -132,5 +178,6 @@ const addOrder = async (req, res) => {
 };
 
 module.exports = {
+  getAllOrders,
   addOrder,
 };

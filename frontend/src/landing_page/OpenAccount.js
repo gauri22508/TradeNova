@@ -1,16 +1,17 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 function OpenAccount() {
     return (
         <div className="container py-5 mb-5">
             <div className="row justify-content-center text-center">
                 <div className=" col-md-8 col-sm-4">
-                 
+
                     <h1 className="mt-3">Open a TradeNova account</h1>
                     <p>Modern platforms and apps, ₹0 investments, and flat ₹20 intraday and F&O trades.</p>
 
                     <div className="d-grid d-sm-block mt-3">
-                        <button className="btn btn-primary fs-5 px-4">Sign up Now</button>
+                        <Link className="btn btn-primary fs-5 px-4" to="/signup">Sign up Now</Link>
                     </div>
                 </div>
             </div>

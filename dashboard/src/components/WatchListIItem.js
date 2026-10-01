@@ -54,6 +54,7 @@ const WatchListItem = ({ stock }) => {
                 <WatchListAction
                     uid={stock.uid}
                     name={stock.name}
+                    price={stock.price}
                 />
             )}
         </li>
@@ -63,7 +64,7 @@ const WatchListItem = ({ stock }) => {
 export default WatchListItem;
 
 
-const WatchListAction = ({ uid, name }) => {
+const WatchListAction = ({ uid, name, price }) => {
 
     const { openBuySellWindow } = useContext(GeneralContext);
 
@@ -80,7 +81,7 @@ const WatchListAction = ({ uid, name }) => {
                     <button
                         className="buy"
                         onClick={() =>
-                            openBuySellWindow(uid, name, "BUY")
+                            openBuySellWindow(uid, name, "BUY", price)
                         }
                     >
                         Buy
@@ -97,7 +98,7 @@ const WatchListAction = ({ uid, name }) => {
                     <button
                         className="sell"
                         onClick={() =>
-                            openBuySellWindow(uid, name, "SELL")
+                            openBuySellWindow(uid, name, "SELL", price)
                         }
                     >
                         Sell

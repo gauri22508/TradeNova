@@ -1,24 +1,25 @@
-import { useState, useEffect , React } from "react";
+import { useState, useEffect, React } from "react";
 
 //import { positions } from "../data/data";
 import axios from "axios";
 import "./Shared.css";
 
 const Positions = () => {
-  const  [ allPositions , setAllPositions]= useState([]);
+  const [allPositions, setAllPositions] = useState([]);
 
- useEffect(() => {
-     axios
-       .get("http://localhost:3002/allPositions")
-       .then((res) => {
-         console.log(res.data);
-         setAllPositions(res.data);
-       })
-       .catch((err) => {
-         console.log("Error fetching positions:", err);
-       });
-   }, []);
- 
+  useEffect(() => {
+    const fetchPositions = () => {
+      axios
+        .get("http://localhost:3002/allPositions", { withCredentials: true })
+        .then((res) => setAllPositions(res.data))
+        .catch((err) => console.log("Error fetching positions:", err));
+    };
+
+    fetchPositions();
+    window.addEventListener("trade:updated", fetchPositions);
+    return () => window.removeEventListener("trade:updated", fetchPositions);
+  }, []);
+
 
 
   return (

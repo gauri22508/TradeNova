@@ -1,20 +1,31 @@
-import { useState, useEffect , React } from "react";
+import { useState, useEffect, React } from "react";
 import "./Shared.css";
 import axios from "axios";
 
 const Holdings = () => {
   const [allHoldings, setAllHoldings] = useState([]);
+  const totalInvestment = allHoldings.reduce(
+    (total, stock) => total + Number(stock.avg || 0) * Number(stock.qty || 0),
+    0
+  );
+  const currentValue = allHoldings.reduce(
+    (total, stock) => total + Number(stock.price || 0) * Number(stock.qty || 0),
+    0
+  );
+  const totalProfitLoss = currentValue - totalInvestment;
+  const totalReturn = totalInvestment ? (totalProfitLoss / totalInvestment) * 100 : 0;
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3002/allHoldings")
-      .then((res) => {
-        console.log(res.data);
-        setAllHoldings(res.data);
-      })
-      .catch((err) => {
-        console.log("Error fetching holdings:", err);
-      });
+    const fetchHoldings = () => {
+      axios
+        .get("http://localhost:3002/allHoldings", { withCredentials: true })
+        .then((res) => setAllHoldings(res.data))
+        .catch((err) => console.log("Error fetching holdings:", err));
+    };
+
+    fetchHoldings();
+    window.addEventListener("trade:updated", fetchHoldings);
+    return () => window.removeEventListener("trade:updated", fetchHoldings);
   }, []);
 
   return (
@@ -74,21 +85,19 @@ const Holdings = () => {
 
       <div className="row">
         <div className="col">
-          <h5>
-            29,875.<span>55</span>
-          </h5>
+          <h5>{totalInvestment.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h5>
           <p>Total investment</p>
         </div>
 
         <div className="col">
-          <h5>
-            31,428.<span>95</span>
-          </h5>
+          <h5>{currentValue.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</h5>
           <p>Current value</p>
         </div>
 
         <div className="col">
-          <h5>1,553.40 (+5.20%)</h5>
+          <h5 className={totalProfitLoss >= 0 ? "profit" : "loss"}>
+            {totalProfitLoss.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ({totalReturn.toFixed(2)}%)
+          </h5>
           <p>P&L</p>
         </div>
       </div>

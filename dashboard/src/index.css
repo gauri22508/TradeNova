@@ -21,3 +21,119 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.app-shell {
+  --page-background: #f7f7f7;
+  --surface-background: #fff;
+  --primary-text: #474747;
+  --secondary-text: #777;
+  --surface-border: #e8e8e8;
+  min-height: 100vh;
+  background: var(--page-background);
+  color: var(--primary-text);
+  transition: background-color 180ms ease, color 180ms ease;
+}
+
+.app-shell.dark-mode {
+  --page-background: #141a20;
+  --surface-background: #1d252d;
+  --primary-text: #e5eaf0;
+  --secondary-text: #a7b1bd;
+  --surface-border: #35414d;
+  color-scheme: dark;
+}
+
+.app-shell.dark-mode .dashboard-container,
+.app-shell.dark-mode .content {
+  background: var(--page-background);
+}
+
+.app-shell.dark-mode .topbar-container,
+.app-shell.dark-mode .watchlist-container,
+.app-shell.dark-mode .watchlist-mobile-header,
+.app-shell.dark-mode .search,
+.app-shell.dark-mode .buy-window-container,
+.app-shell.dark-mode .regular-order,
+.app-shell.dark-mode .buttons,
+.app-shell.dark-mode .table {
+  background: var(--surface-background);
+}
+
+.app-shell.dark-mode .topbar-container,
+.app-shell.dark-mode .indices-container,
+.app-shell.dark-mode .watchlist-container,
+.app-shell.dark-mode .search,
+.app-shell.dark-mode .list li,
+.app-shell.dark-mode .table,
+.app-shell.dark-mode .order-table tr,
+.app-shell.dark-mode .buy-window-container,
+.app-shell.dark-mode .inputs fieldset,
+.app-shell.dark-mode .buttons,
+.app-shell.dark-mode hr {
+  border-color: var(--surface-border);
+}
+
+.app-shell.dark-mode .index,
+.app-shell.dark-mode .menu:not(.selected),
+.app-shell.dark-mode .username,
+.app-shell.dark-mode .title,
+.app-shell.dark-mode .section span p,
+.app-shell.dark-mode .section-icon,
+.app-shell.dark-mode .order-table th,
+.app-shell.dark-mode .order-table td:not(.profit):not(.loss),
+.app-shell.dark-mode .no-orders p,
+.app-shell.dark-mode .funds p,
+.app-shell.dark-mode .table .data p:first-child,
+.app-shell.dark-mode .inputs fieldset legend,
+.app-shell.dark-mode .buttons span {
+  color: var(--secondary-text);
+}
+
+.app-shell.dark-mode .username h6,
+.app-shell.dark-mode .data .first h3,
+.app-shell.dark-mode .data .second p span,
+.app-shell.dark-mode .imp,
+.app-shell.dark-mode .search,
+.app-shell.dark-mode .inputs fieldset input {
+  color: var(--primary-text);
+}
+
+.app-shell.dark-mode .search::placeholder {
+  color: var(--secondary-text);
+}
+
+.app-shell.dark-mode .list li:hover {
+  background: #28333e;
+}
+
+.app-shell.dark-mode .action,
+.app-shell.dark-mode .profile .logout-button,
+.app-shell.dark-mode .profile .theme-toggle,
+.app-shell.dark-mode .profile-dropdown {
+  background: #26323d;
+  border-color: #465563;
+  color: #c8dfff;
+}
+
+.app-shell.dark-mode .profile .logout-button:hover,
+.app-shell.dark-mode .profile .theme-toggle:hover {
+  background: #344656;
+}
+
+.app-shell.dark-mode .profile .avatar {
+  background: #293b4d;
+  color: #c8dfff;
+}
+
+.app-shell.dark-mode .menu.selected,
+.app-shell.dark-mode .menu.selected:hover {
+  color: #8fc1ff;
+}
+
+.app-shell.dark-mode .menus ul.mobile-menu-open {
+  background: var(--surface-background);
+}
+
+.app-shell.dark-mode .inputs fieldset input {
+  background: transparent;
+}

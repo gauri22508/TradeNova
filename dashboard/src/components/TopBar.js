@@ -3,7 +3,7 @@ import React from "react";
 import "./TopBar.css";
 import Menu from "./Menu";
 
-const TopBar = () => {
+const TopBar = ({ username, isDarkMode, onToggleDarkMode }) => {
   return (
     <div className="topbar-container">
       <div className="indices-container">
@@ -19,7 +19,11 @@ const TopBar = () => {
         </div>
       </div>
 
-      <Menu />
+      <Menu
+        username={username}
+        isDarkMode={isDarkMode}
+        onToggleDarkMode={onToggleDarkMode}
+      />
     </div>
   );
 };

@@ -129,8 +129,30 @@
     color: #555;
 }
 
+.order-error {
+    margin: 0;
+    color: #b42318;
+    font-size: 0.8rem;
+}
 
-.buttons > div {
+.order-toast {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    z-index: 1100;
+    max-width: min(420px, calc(100vw - 32px));
+    padding: 14px 18px;
+    border: 1px solid #b7dfc4;
+    border-left: 4px solid #27834a;
+    border-radius: 4px;
+    background: #f0faf3;
+    color: #205c35;
+    box-shadow: 0 8px 24px rgba(28, 60, 39, 0.16);
+    font-size: 0.9rem;
+}
+
+
+.buttons>div {
     display: flex;
 
     align-items: center;
@@ -155,6 +177,12 @@
     cursor: pointer;
 
     border: none;
+    font-family: inherit;
+}
+
+.btn:disabled {
+    cursor: wait;
+    opacity: 0.65;
 }
 
 
@@ -212,8 +240,7 @@
         gap: 15px;
     }
 
-    .buttons > div {
+    .buttons>div {
         justify-content: flex-end;
     }
 }
-  

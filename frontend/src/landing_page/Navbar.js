@@ -1,8 +1,16 @@
 import React from 'react';
 import './Navbar.css';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
 
 function Navbar() {
+  const [cookies, , removeCookie] = useCookies(['token']);
+
+  const handleLogout = () => {
+    removeCookie('token');
+    window.location.href = '/login';
+  };
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light">
       <div className="container-fluid">
@@ -20,29 +28,35 @@ function Navbar() {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-auto">
             <li className="nav-item">
-              <Link className="nav-link" to="/signup">
-                SignUp
-              </Link>
+              {cookies.token ? (
+                <button className="nav-link" onClick={handleLogout} type="button">
+                  Logout
+                </button>
+              ) : (
+                <NavLink className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'} to="/signup">
+                  SignUp
+                </NavLink>
+              )}
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/about">
+              <NavLink className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'} to="/about">
                 About
-              </Link>
+              </NavLink>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/products">
+              <NavLink className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'} to="/products">
                 Products
-              </Link>
+              </NavLink>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/pricing">
+              <NavLink className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'} to="/pricing">
                 Pricing
-              </Link>
+              </NavLink>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/support">
+              <NavLink className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'} to="/support">
                 Support
-              </Link>
+              </NavLink>
             </li>
 
           </ul>
