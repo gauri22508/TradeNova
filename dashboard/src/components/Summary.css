@@ -64,6 +64,10 @@
     color: rgb(72, 194, 55);
 }
 
+.data .first .loss {
+    color: rgb(250, 118, 78);
+}
+
 .data hr {
     border-left: 0.6px solid rgb(243, 242, 242);
     height: 70px;

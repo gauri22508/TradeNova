@@ -34,6 +34,7 @@ const BuySellActionWindow = ({ name, price, mode }) => {
                     name: name,
                     qty: quantity,
                     price: orderPrice,
+                    marketPrice: Number(price),
                     mode: mode,
                 },
                 { withCredentials: true }
@@ -106,6 +107,10 @@ const BuySellActionWindow = ({ name, price, mode }) => {
                     </fieldset>
 
                 </div>
+
+                <p className="market-price-note">
+                    Current demo market price: ₹{Number(price).toFixed(2)}. The order price above is your buy/sell price.
+                </p>
 
             </div>
 

@@ -10,7 +10,7 @@ function Pricing() {
 }
 
 .price-link:hover {
-  color: #89a4cc;
+  color: #738eb6;
   text-decoration: none;
  }`}</style>
 

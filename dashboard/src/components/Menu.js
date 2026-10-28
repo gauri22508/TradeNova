@@ -13,7 +13,7 @@ const Menu = ({ username = "User", isDarkMode, onToggleDarkMode }) => {
 
   const handleLogout = () => {
     document.cookie = "token=; Max-Age=0; path=/";
-    window.location.href = "http://localhost:3000/login";
+    window.location.href = "http://localhost:3000/";
   };
 
   const menuClass = "menu";

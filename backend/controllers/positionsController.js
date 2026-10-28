@@ -1,10 +1,8 @@
 const { PositionsModel } = require("../models/PositionsModel");
 const { getOpenOrderBalances } = require("../Util/OrderBalances");
-const { claimLegacyRecords } = require("../Util/LegacyRecords");
 
 const getAllPositions = async (req, res) => {
   try {
-    await claimLegacyRecords(PositionsModel, req.userId);
     const existingPositions = await PositionsModel.find({ userId: req.userId }).select("name");
     const existingNames = new Set(existingPositions.map((position) => position.name));
     const missingPositions = (await getOpenOrderBalances(req.userId))

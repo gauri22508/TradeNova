@@ -1,10 +1,8 @@
 const { HoldingsModel } = require("../models/HoldingsModel");
 const { getOpenOrderBalances } = require("../Util/OrderBalances");
-const { claimLegacyRecords } = require("../Util/LegacyRecords");
 
 const getAllHoldings = async (req, res) => {
   try {
-    await claimLegacyRecords(HoldingsModel, req.userId);
     const existingHoldings = await HoldingsModel.find({ userId: req.userId }).select("name");
     const existingNames = new Set(existingHoldings.map((holding) => holding.name));
     const missingHoldings = (await getOpenOrderBalances(req.userId))

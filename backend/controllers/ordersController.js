@@ -4,8 +4,34 @@ const { OrdersModel } = require("../models/OrdersModel");
 
 const getAllOrders = async (req, res) => {
   try {
-    const allOrders = await OrdersModel.find({ userId: req.userId }).sort({ _id: -1 });
-    res.json(allOrders);
+    const orders = await OrdersModel.find({ userId: req.userId }).sort({ _id: 1 });
+    const balances = new Map();
+    const ordersWithProfitLoss = orders.map((order) => {
+      const quantity = Number(order.qty);
+      const price = Number(order.price);
+      const balance = balances.get(order.name) || { qty: 0, avg: 0 };
+      let realizedPnL = Number(order.realizedPnL);
+
+      if (order.mode === "BUY") {
+        const nextQuantity = balance.qty + quantity;
+        balance.avg = (balance.qty * balance.avg + quantity * price) / nextQuantity;
+        balance.qty = nextQuantity;
+      } else if (order.mode === "SELL") {
+        if (!Number.isFinite(realizedPnL)) {
+          realizedPnL = (price - balance.avg) * Math.min(quantity, balance.qty);
+        }
+        balance.qty = Math.max(0, balance.qty - quantity);
+        if (balance.qty === 0) balance.avg = 0;
+      }
+
+      balances.set(order.name, balance);
+      return {
+        ...order.toObject(),
+        realizedPnL: order.mode === "SELL" ? realizedPnL : null,
+      };
+    });
+
+    res.json(ordersWithProfitLoss.reverse());
   } catch (err) {
     console.log("Error fetching orders:", err);
     res.status(500).json({ error: "Failed to fetch orders" });
@@ -14,15 +40,21 @@ const getAllOrders = async (req, res) => {
 
 const addOrder = async (req, res) => {
   try {
-    const { name, qty, price, mode } = req.body;
-
-    console.log("ORDER DATA:", req.body);
+    const { name, qty, price, marketPrice, mode } = req.body;
 
     const quantity = Number(qty);
     const orderPrice = Number(price);
+    const currentMarketPrice =
+      marketPrice === undefined ? orderPrice : Number(marketPrice);
 
-    // Basic validation
-    if (!name || !quantity || !orderPrice || !mode) {
+    if (
+      typeof name !== "string" ||
+      !name.trim() ||
+      !Number.isInteger(quantity) ||
+      !Number.isFinite(orderPrice) ||
+      !Number.isFinite(currentMarketPrice) ||
+      !mode
+    ) {
       return res.status(400).json({
         error: "Missing required order details",
       });
@@ -34,7 +66,7 @@ const addOrder = async (req, res) => {
       });
     }
 
-    if (orderPrice <= 0) {
+    if (orderPrice <= 0 || currentMarketPrice <= 0) {
       return res.status(400).json({
         error: "Price must be greater than 0",
       });
@@ -46,134 +78,126 @@ const addOrder = async (req, res) => {
       });
     }
 
-    const holding = await HoldingsModel.findOne({ name, userId: req.userId });
-    const position = await PositionsModel.findOne({ name, userId: req.userId });
-
-    console.log("FOUND HOLDING:", holding);
-    console.log("MODE:", mode);
-
-
-    // SELL
-    // =========================
+    const stockName = name.trim();
+    const holding = await HoldingsModel.findOne({ name: stockName, userId: req.userId });
+    let position = await PositionsModel.findOne({ name: stockName, userId: req.userId });
+    let realizedPnL;
 
     if (mode === "SELL") {
-      console.log("SELL requested");
-
       if (!holding) {
-        return res.status(400).send("You don't own this stock");
+        return res.status(400).json({ error: "You don't own this stock" });
       }
 
       const newQty = holding.qty - quantity;
 
       if (newQty < 0) {
-        return res.status(400).send("Not enough quantity");
+        return res.status(400).json({ error: "Not enough quantity" });
       }
 
+      realizedPnL = (orderPrice - holding.avg) * quantity;
       if (newQty === 0) {
         await HoldingsModel.deleteOne({
-          name: name,
+          name: stockName,
           userId: req.userId,
         });
       } else {
         holding.qty = newQty;
-        holding.price = orderPrice;
-
+        holding.price = currentMarketPrice;
+        holding.net = `${(((currentMarketPrice - holding.avg) / holding.avg) * 100).toFixed(2)}%`;
         await holding.save();
       }
 
       if (position) {
-        const newPositionQty = position.qty - quantity;
-
-        if (newPositionQty <= 0) {
+        if (newQty === 0) {
           await PositionsModel.deleteOne({ _id: position._id });
         } else {
-          position.qty = newPositionQty;
-          position.price = orderPrice;
+          position.qty = newQty;
+          position.avg = holding.avg;
+          position.price = currentMarketPrice;
+          position.net = `${(((currentMarketPrice - position.avg) / position.avg) * 100).toFixed(2)}%`;
+          position.isLoss = currentMarketPrice < position.avg;
           await position.save();
         }
+      } else if (newQty > 0) {
+        position = await PositionsModel.create({
+          userId: req.userId,
+          product: "CNC",
+          name: stockName,
+          qty: newQty,
+          avg: holding.avg,
+          price: currentMarketPrice,
+          net: `${(((currentMarketPrice - holding.avg) / holding.avg) * 100).toFixed(2)}%`,
+          day: "0%",
+          isLoss: currentMarketPrice < holding.avg,
+        });
       }
     }
 
-
-    // BUY
-    // =========================
-
     if (mode === "BUY") {
-      if (holding) {
-        console.log("BUY: Existing holding found");
+      let updatedHolding;
 
+      if (holding) {
         const oldQty = holding.qty;
         const oldAvg = holding.avg;
-
         const newQty = oldQty + quantity;
-
-        const newAvg =
-          (oldQty * oldAvg + quantity * orderPrice) / newQty;
-
+        const newAvg = (oldQty * oldAvg + quantity * orderPrice) / newQty;
         holding.qty = newQty;
         holding.avg = newAvg;
-        holding.price = orderPrice;
-
-        await holding.save();
-
-        console.log("UPDATED HOLDING:", holding);
+        holding.price = currentMarketPrice;
+        holding.net = `${(((currentMarketPrice - newAvg) / newAvg) * 100).toFixed(2)}%`;
+        updatedHolding = await holding.save();
       } else {
-        console.log("BUY: Holding not found, creating new");
-
-        const newHolding = new HoldingsModel({
+        const newAvg = orderPrice;
+        updatedHolding = await HoldingsModel.create({
           userId: req.userId,
-          name: name,
+          name: stockName,
           qty: quantity,
-          avg: orderPrice,
-          price: orderPrice,
-          net: "0%",
+          avg: newAvg,
+          price: currentMarketPrice,
+          net: `${(((currentMarketPrice - newAvg) / newAvg) * 100).toFixed(2)}%`,
           day: "0%",
         });
-
-        await newHolding.save();
-
-        console.log("NEW HOLDING:", newHolding);
       }
 
       if (position) {
-        const oldQty = position.qty;
-        const newQty = oldQty + quantity;
-        position.avg = (oldQty * position.avg + quantity * orderPrice) / newQty;
-        position.qty = newQty;
-        position.price = orderPrice;
+        position.avg = updatedHolding.avg;
+        position.qty = updatedHolding.qty;
+        position.price = currentMarketPrice;
+        position.net = `${(((currentMarketPrice - position.avg) / position.avg) * 100).toFixed(2)}%`;
+        position.isLoss = currentMarketPrice < position.avg;
         await position.save();
       } else {
         await PositionsModel.create({
           userId: req.userId,
           product: "CNC",
-          name,
-          qty: quantity,
-          avg: orderPrice,
-          price: orderPrice,
-          net: "0%",
+          name: stockName,
+          qty: updatedHolding.qty,
+          avg: updatedHolding.avg,
+          price: currentMarketPrice,
+          net: `${(((currentMarketPrice - updatedHolding.avg) / updatedHolding.avg) * 100).toFixed(2)}%`,
           day: "0%",
-          isLoss: false,
+          isLoss: currentMarketPrice < updatedHolding.avg,
         });
       }
     }
 
-    // Save order only after BUY/SELL operation succeeds
     const newOrder = new OrdersModel({
       userId: req.userId,
-      name: name,
+      name: stockName,
       qty: quantity,
       price: orderPrice,
+      marketPrice: currentMarketPrice,
       mode: mode,
+      ...(mode === "SELL" ? { realizedPnL } : {}),
     });
 
     await newOrder.save();
 
-    res.send("Order saved and holding updated");
+    res.json({ message: "Order saved and portfolio updated", realizedPnL });
 
   } catch (err) {
-    console.log("ERROR:", err);
-
-    res.status(500).send("Failed");
+    console.error("Error saving order:", err);
+    res.status(500).json({ error: "Failed to save order" });
   }
 };
 

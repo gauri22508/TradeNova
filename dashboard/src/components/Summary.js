@@ -4,18 +4,35 @@ import "./Summary.css";
 
 const Summary = ({ username = "User" }) => {
   const [holdings, setHoldings] = useState([]);
+  const [realizedPnL, setRealizedPnL] = useState(0);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3002/allHoldings", { withCredentials: true })
-      .then(({ data }) => setHoldings(data))
-      .catch(() => setHoldings([]));
+    const fetchPortfolio = () => {
+      Promise.all([
+        axios.get("http://localhost:3002/allHoldings", { withCredentials: true }),
+        axios.get("http://localhost:3002/allOrders", { withCredentials: true }),
+      ])
+        .then(([holdingsResponse, ordersResponse]) => {
+          setHoldings(holdingsResponse.data);
+          setRealizedPnL(
+            ordersResponse.data.reduce(
+              (total, order) => total + Number(order.realizedPnL || 0),
+              0
+            )
+          );
+        })
+        .catch((error) => console.error("Error fetching portfolio summary:", error));
+    };
+
+    fetchPortfolio();
+    window.addEventListener("trade:updated", fetchPortfolio);
+    return () => window.removeEventListener("trade:updated", fetchPortfolio);
   }, []);
 
   const investment = holdings.reduce((sum, item) => sum + Number(item.avg || 0) * Number(item.qty || 0), 0);
   const currentValue = holdings.reduce((sum, item) => sum + Number(item.price || 0) * Number(item.qty || 0), 0);
-  const profitLoss = currentValue - investment;
-  const returnPercent = investment ? (profitLoss / investment) * 100 : 0;
+  const unrealizedPnL = currentValue - investment;
+  const totalProfitLoss = unrealizedPnL + realizedPnL;
   const formatAmount = (amount) => `₹${amount.toLocaleString("en-IN", { maximumFractionDigits: 2 })}`;
 
   return (
@@ -56,10 +73,10 @@ const Summary = ({ username = "User" }) => {
 
         <div className="data">
           <div className="first">
-            <h3 className="profit">
-              {formatAmount(profitLoss)} <small>{returnPercent.toFixed(2)}%</small>{" "}
+            <h3 className={totalProfitLoss >= 0 ? "profit" : "loss"}>
+              {formatAmount(totalProfitLoss)}
             </h3>
-            <p>P&L</p>
+            <p>Total P&amp;L (realized + open)</p>
           </div>
           <hr />
 
@@ -69,6 +86,12 @@ const Summary = ({ username = "User" }) => {
             </p>
             <p>
               Investment <span>{formatAmount(investment)}</span>{" "}
+            </p>
+            <p>
+              Realized P&amp;L <span>{formatAmount(realizedPnL)}</span>{" "}
+            </p>
+            <p>
+              Open P&amp;L <span>{formatAmount(unrealizedPnL)}</span>{" "}
             </p>
           </div>
         </div>

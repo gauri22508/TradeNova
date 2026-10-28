@@ -5,8 +5,9 @@ const OrdersSchema = new Schema({
   name: String,
   qty: Number,
   price: Number,
+  marketPrice: Number,
   mode: String,
-
+  realizedPnL: Number,
 });
 
 module.exports = { OrdersSchema };
