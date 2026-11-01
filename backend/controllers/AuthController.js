@@ -2,7 +2,7 @@ const User = require("../models/UserModel");
 const { createSecretToken } = require("../Util/SecretToken");
 const bcrypt = require("bcrypt");
 
-module.exports.Signup = async (req, res, next) => {
+module.exports.Signup = async (req, res) => {
     try {
         const { email, password, username, createdAt } = req.body;
 
@@ -22,10 +22,12 @@ module.exports.Signup = async (req, res, next) => {
         res.status(201).json({
             message: "User signed in successfully",
             success: true,
-            user,
+            user: {
+                id: user._id,
+                email: user.email,
+                username: user.username,
+            },
         });
-
-        next();
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Signup failed" });
@@ -59,7 +61,11 @@ module.exports.Login = async (req, res, next) => {
         res.status(200).json({
             message: "User logged in successfully",
             success: true,
-            user,
+            user: {
+                id: user._id,
+                email: user.email,
+                username: user.username,
+            },
         });
     } catch (error) {
         console.error(error);

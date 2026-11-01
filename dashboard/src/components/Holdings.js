@@ -80,7 +80,12 @@ const Holdings = () => {
 
               const isProfit = profitLoss >= 0;
               const profClass = isProfit ? "profit" : "loss";
-              const dayClass = stock.isLoss ? "loss" : "profit";
+              const hasDayChange = Boolean(stock.day && stock.day !== "0%");
+              const dayClass = hasDayChange
+                ? stock.isLoss
+                  ? "loss"
+                  : "profit"
+                : "";
 
               return (
                 <tr key={stock._id || index}>
@@ -99,7 +104,7 @@ const Holdings = () => {
                   </td>
 
                   <td className={dayClass}>
-                    {stock.day}
+                    {hasDayChange ? stock.day : "—"}
                   </td>
                 </tr>
               );

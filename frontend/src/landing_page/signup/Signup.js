@@ -1,12 +1,11 @@
 
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import './common.css';
 
 const Signup = () => {
-  const navigate = useNavigate();
   const [inputValue, setInputValue] = useState({
     email: "",
     password: "",
@@ -50,14 +49,8 @@ const Signup = () => {
         handleError(message);
       }
     } catch (error) {
-      console.log(error);
+      handleError(error.response?.data?.message || "Unable to connect. Please try again.");
     }
-    setInputValue({
-      ...inputValue,
-      email: "",
-      password: "",
-      username: "",
-    });
   };
 
   return (
@@ -75,9 +68,10 @@ const Signup = () => {
           />
         </div>
         <div>
-          <label htmlFor="email">Username</label>
+          <label htmlFor="username">Username</label>
           <input
             type="text"
+            id="username"
             name="username"
             value={username}
             placeholder="Enter your username"

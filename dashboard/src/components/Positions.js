@@ -42,7 +42,12 @@ const Positions = () => {
               const currentPrice = Number(stock.price) || 0;
               const profitLoss = (currentPrice - averagePrice) * quantity;
               const profClass = profitLoss >= 0 ? "profit" : "loss";
-              const dayClass = stock.isLoss ? "loss" : "profit";
+              const hasDayChange = Boolean(stock.day && stock.day !== "0%");
+              const dayClass = hasDayChange
+                ? stock.isLoss
+                  ? "loss"
+                  : "profit"
+                : "";
 
               return (
                 <tr key={stock._id || index}>
@@ -52,7 +57,7 @@ const Positions = () => {
                   <td>{averagePrice.toFixed(2)}</td>
                   <td>{currentPrice.toFixed(2)}</td>
                   <td className={profClass}>{profitLoss.toFixed(2)}</td>
-                  <td className={dayClass}>{stock.day}</td>
+                  <td className={dayClass}>{hasDayChange ? stock.day : "—"}</td>
                 </tr>
               );
             })}
