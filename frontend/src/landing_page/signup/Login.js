@@ -41,7 +41,7 @@ const Login = () => {
       if (success) {
         handleSuccess(message);
         setTimeout(() => {
-          window.location.href = "http://localhost:3000/home";
+        window.location.href = "https://tradenova-dashboard-8nz5.onrender.com/home";
         }, 1000);
       } else {
         handleError(message);

@@ -29,14 +29,14 @@ const Home = () => {
         );
 
         if (!data.status) {
-          window.location.href = "http://localhost:3000/login";
+        window.location.href = "https://tradenova-frontend-002l.onrender.com/login";
           return;
         }
 
         setUsername(data.user || "User");
         setIsVerifying(false);
       } catch (error) {
-        window.location.href = "http://localhost:3000/login";
+        window.location.href = "https://tradenova-frontend-002l.onrender.com/login";
       }
     };
 
