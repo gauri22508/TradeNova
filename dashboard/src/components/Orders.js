@@ -8,7 +8,7 @@ const Orders = () => {
   useEffect(() => {
     const fetchOrders = () => {
       axios
-        .get("http://localhost:3002/allOrders", { withCredentials: true })
+        .get("https://tradenova-backend-ih11.onrender.com/allOrders", { withCredentials: true })
         .then((res) => setAllOrders(res.data))
         .catch((err) => console.error("Error fetching Orders:", err));
     };

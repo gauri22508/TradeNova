@@ -8,7 +8,7 @@ const Positions = () => {
   useEffect(() => {
     const fetchPositions = () => {
       axios
-        .get("http://localhost:3002/allPositions", { withCredentials: true })
+        .get("https://tradenova-backend-ih11.onrender.com/allPositions", { withCredentials: true })
         .then((res) => setAllPositions(res.data))
         .catch((err) => console.log("Error fetching positions:", err));
     };

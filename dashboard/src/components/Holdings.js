@@ -19,8 +19,8 @@ const Holdings = () => {
 
   useEffect(() => {
     const fetchPortfolio = () => {
-      const holdingsRequest = axios.get("http://localhost:3002/allHoldings", { withCredentials: true });
-      const ordersRequest = axios.get("http://localhost:3002/allOrders", { withCredentials: true });
+      const holdingsRequest = axios.get("https://tradenova-backend-ih11.onrender.com/allHoldings", { withCredentials: true });
+      const ordersRequest = axios.get("https://tradenova-backend-ih11.onrender.com/allOrders", { withCredentials: true });
 
       Promise.all([holdingsRequest, ordersRequest])
         .then(([holdingsResponse, ordersResponse]) => {

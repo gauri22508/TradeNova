@@ -9,8 +9,8 @@ const Summary = ({ username = "User" }) => {
   useEffect(() => {
     const fetchPortfolio = () => {
       Promise.all([
-        axios.get("http://localhost:3002/allHoldings", { withCredentials: true }),
-        axios.get("http://localhost:3002/allOrders", { withCredentials: true }),
+        axios.get("https://tradenova-backend-ih11.onrender.com/allHoldings", { withCredentials: true }),
+        axios.get("https://tradenova-backend-ih11.onrender.com/allOrders", { withCredentials: true }),
       ])
         .then(([holdingsResponse, ordersResponse]) => {
           setHoldings(holdingsResponse.data);

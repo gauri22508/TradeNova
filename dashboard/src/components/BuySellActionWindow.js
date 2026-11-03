@@ -29,7 +29,7 @@ const BuySellActionWindow = ({ name, price, mode }) => {
         setIsSubmitting(true);
         try {
             await axios.post(
-                "http://localhost:3002/addOrder",
+                "https://tradenova-backend-ih11.onrender.com/addOrder",
                 {
                     name: name,
                     qty: quantity,

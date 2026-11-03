@@ -16,7 +16,7 @@ const Home = () => {
 
             try {
                 const { data } = await axios.post(
-                    "http://localhost:3002/verify",
+                    "https://tradenova-backend-ih11.onrender.com/verify",
                     {},
                     { withCredentials: true }
                 );
