@@ -20,7 +20,7 @@ const app = express();
 // Middleware
 const allowedOrigins = [
   "http://localhost:3000",
-  "http://localhost:3001",
+  "https://tradenova-dashboard-8nz5.onrender.com",
   process.env.FRONTEND_URL,
   process.env.DASHBOARD_URL,
 ].filter(Boolean);

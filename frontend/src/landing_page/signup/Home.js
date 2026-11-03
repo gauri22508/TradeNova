@@ -27,7 +27,7 @@ const Home = () => {
                     return;
                 }
 
-                window.location.href = "http://localhost:3001/";
+                window.location.href = "https://tradenova-dashboard-8nz5.onrender.com/";
             } catch (error) {
                 removeCookie("token");
                 navigate("/login");
