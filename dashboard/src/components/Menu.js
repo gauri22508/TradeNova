@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 
 import { NavLink } from "react-router-dom";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
@@ -11,11 +12,23 @@ const Menu = ({ username = "User", isDarkMode, onToggleDarkMode }) => {
   const displayName = username.trim() || "User";
   const avatarInitial = displayName.charAt(0).toUpperCase();
 
-  const handleLogout = () => {
-    document.cookie = "token=; Max-Age=0; path=/";
-   window.location.href = "https://tradenova-frontend-002l.onrender.com/login";
-  };
+  const handleLogout = async () => {
+  try {
+    const response = await axios.post(
+      "https://tradenova-backend-ih11.onrender.com/logout",
+      {},
+      { withCredentials: true }
+    );
 
+    if (response.data.success) {
+      window.location.href =
+        "https://tradenova-frontend-002l.onrender.com/login";
+    }
+  } catch (error) {
+    console.error("Logout error:", error);
+    alert("Logout failed. Please try again.");
+  }
+};
   const menuClass = "menu";
   const activeMenuClass = "menu selected";
 
