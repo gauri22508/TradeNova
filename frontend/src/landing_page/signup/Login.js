@@ -29,6 +29,10 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!email.trim() || !password.trim()) {
+  handleError("Please enter email and password");
+  return;
+}
     try {
       const { data } = await axios.post(
         "https://tradenova-backend-ih11.onrender.com/login",

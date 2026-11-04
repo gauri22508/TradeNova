@@ -5,6 +5,7 @@ import "./Summary.css";
 const Summary = ({ username = "User" }) => {
   const [holdings, setHoldings] = useState([]);
   const [realizedPnL, setRealizedPnL] = useState(0);
+  const [balance, setBalance] = useState(null);
 
   useEffect(() => {
     const fetchPortfolio = () => {
@@ -29,6 +30,25 @@ const Summary = ({ username = "User" }) => {
     return () => window.removeEventListener("trade:updated", fetchPortfolio);
   }, []);
 
+  useEffect(() => {
+    let isMounted = true;
+    const fetchBalance = () => {
+      axios
+        .get("https://tradenova-backend-ih11.onrender.com/balance", { withCredentials: true })
+        .then(({ data }) => {
+          if (isMounted) setBalance(data);
+        })
+        .catch((error) => console.error("Error fetching account balance:", error));
+    };
+
+    fetchBalance();
+    window.addEventListener("trade:updated", fetchBalance);
+    return () => {
+      isMounted = false;
+      window.removeEventListener("trade:updated", fetchBalance);
+    };
+  }, []);
+
   const investment = holdings.reduce((sum, item) => sum + Number(item.avg || 0) * Number(item.qty || 0), 0);
   const currentValue = holdings.reduce((sum, item) => sum + Number(item.price || 0) * Number(item.qty || 0), 0);
   const unrealizedPnL = currentValue - investment;
@@ -49,17 +69,17 @@ const Summary = ({ username = "User" }) => {
 
         <div className="data">
           <div className="first">
-            <h3>{formatAmount(Math.max(0, 100000 - currentValue))}</h3>
+            <h3>{balance ? formatAmount(balance.availableBalance) : "--"}</h3>
             <p>Margin available (demo)</p>
           </div>
           <hr />
 
           <div className="second">
             <p>
-              Margins used <span>{formatAmount(currentValue)}</span>{" "}
+              Margins used <span>{balance ? formatAmount(balance.usedBalance) : "--"}</span>{" "}
             </p>
             <p>
-              Opening balance <span>{formatAmount(100000)}</span>{" "}
+              Opening balance <span>{balance ? formatAmount(balance.initialBalance) : "--"}</span>{" "}
             </p>
           </div>
         </div>

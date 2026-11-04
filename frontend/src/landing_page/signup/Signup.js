@@ -31,6 +31,15 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!email.trim() || !password.trim() || !username.trim()) {
+  handleError("Please fill all fields");
+  return;
+}
+
+if (password.length < 8) {
+  handleError("Password must be at least 8 characters long");
+  return;
+}
     try {
       const { data } = await axios.post(
         "https://tradenova-backend-ih11.onrender.com/signup",

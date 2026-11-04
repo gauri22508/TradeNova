@@ -15,6 +15,21 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, "Your password is required"],
   },
+  initialBalance: {
+    type: Number,
+    default: 100000,
+    min: 0,
+  },
+  availableBalance: {
+    type: Number,
+    default: 100000,
+    min: 0,
+  },
+  usedBalance: {
+    type: Number,
+    default: 0,
+    min: 0,
+  },
   createdAt: {
     type: Date,
     default: Date.now,
@@ -22,7 +37,9 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.pre("save", async function () {
-  this.password = await bcrypt.hash(this.password, 12);
+  if (this.isModified("password")) {
+    this.password = await bcrypt.hash(this.password, 12);
+  }
 });
 
 module.exports = mongoose.model("User", userSchema);
